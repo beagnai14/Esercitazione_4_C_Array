@@ -23,8 +23,7 @@ int main()
 	
 	delete[] w;
 	delete[] r;
-	
-	cout << "stampa" << endl;
+
     return 0;
 }
 
