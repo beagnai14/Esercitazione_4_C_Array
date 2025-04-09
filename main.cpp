@@ -12,7 +12,7 @@ int main()
 	string outputFile = "result.txt";
 	
 	double S;
-	int n;
+	size_t n;
 	double *w = nullptr;
 	double *r = nullptr;
 	
