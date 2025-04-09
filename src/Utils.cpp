@@ -34,7 +34,7 @@ bool ImportVectors(const string& inputFilePath,
 	//controllo valore di n
 	if (n == 0) {
     cerr << "Errore: il valore di n è 0." << endl;
-    exit(1); 
+    return 1; 
 	}
 
 	string tmp; 	    //per saltare le riga
