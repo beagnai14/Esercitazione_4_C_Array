@@ -6,9 +6,10 @@
 
 using namespace std;
 
+
 bool ImportVectors(const string& inputFilePath,
 			   double& S,
-			   int& n,
+			   size_t& n,
 			   double*& w,
 			   double*& r) 
 {			   
@@ -16,13 +17,25 @@ bool ImportVectors(const string& inputFilePath,
 	if (file.fail())
 		return false;
 	
-	file.ignore(2,';');
-	file >> S;
-	file.get();   //ignoro il carattere '\n'
+	string riga;
+	char lettera;
+	char separatore;
 	
-	file.ignore(2,';');
-	file >> n;
-	file.get(); 	//ignoro il carattere '\n'	
+	//leggo S
+	getline(file, riga);
+	stringstream string1(riga);
+	string1 >> lettera >> separatore >> S;
+	
+	//leggo n
+	getline(file, riga);
+	stringstream string2(riga);
+	string2 >> lettera >> separatore >> n;	
+	
+	//controllo valore di n
+	if (n == 0) {
+    cerr << "Errore: il valore di n è 0." << endl;
+    exit(1); 
+	}
 
 	string tmp; 	    //per saltare le riga
 	getline(file, tmp); //leggo e non salvo la riga
@@ -31,7 +44,7 @@ bool ImportVectors(const string& inputFilePath,
 	w = new double[n]; 	
 	r = new double[n]; 
 	
-	for (int i = 0; i < n; i++) {
+	for (unsigned int i = 0; i < n; i++) {
 		getline(file, line);
 		stringstream riga(line);
 		char separatore;
@@ -44,12 +57,12 @@ bool ImportVectors(const string& inputFilePath,
 }
 
 
-double DotProduct(const int& n,
+double DotProduct(const size_t& n,
                   const double* const& w,
                   const double* const& r)
 {
 	double prod = 0.0;
-	for (int i = 0; i < n; i++){
+	for (unsigned int i = 0; i < n; i++){
 		prod += w[i] * r[i];
 	}
 	return prod;
@@ -57,13 +70,13 @@ double DotProduct(const int& n,
 }
 
 
-double ValuePortfolio (const int& n,
+double ValuePortfolio (const size_t& n,
 						const double& S,
 						const double* const& w,
 						const double* const& r)
 {
 	double V = 0.0;
-	for (int i = 0; i < n; i++){
+	for (unsigned int i = 0; i < n; i++){
 		V += w[i] * (1 + r[i]);
 	}
 	V = V * S;
@@ -72,7 +85,7 @@ double ValuePortfolio (const int& n,
 
 
 bool ExportResult (const string& outputFilePath,
-		const int& n,
+		const size_t& n,
 		const double& S,
 		const double* const& w,
 		const double* const& r,
@@ -83,23 +96,23 @@ bool ExportResult (const string& outputFilePath,
 	if (outputFile.fail())
 		return false;
 		
-	outputFile << setprecision(2) << fixed << "S = " << S << ", n = " << n << endl;
+	outputFile << setprecision(2)<< fixed << "S = " << S << ", n = " << n << endl;
 	
 	//output w
 	outputFile << "w = [ ";
-	for (int i = 0; i < n; i++) {
+	for (unsigned int i = 0; i < n; i++) {
 		outputFile << w[i] << " ";
 	}
 	outputFile << "]" << endl;
 	
 	//output r
 	outputFile << "r = [ ";
-	for (int i = 0; i < n; i++) {
+	for (unsigned int i = 0; i < n; i++) {
 		outputFile << r[i] << " ";
 	}
 	outputFile << "]" << endl;
 	
-	outputFile << setprecision(4) << fixed << "Rate of return of the portfolio: " << prod << endl;
+	outputFile << setprecision(4) << fixed <<  "Rate of return of the portfolio: " << prod << endl;
 	
 	outputFile << setprecision(2) << fixed << "V: " << V << endl;
 	
